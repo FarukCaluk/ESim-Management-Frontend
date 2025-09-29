@@ -1,0 +1,7 @@
+import { api } from '../common-api';
+import { User } from '../../types/type-user';
+
+export const getUsers = async (): Promise<User[]> => {
+  const res = await api.get('/users');
+  return res.data;
+};

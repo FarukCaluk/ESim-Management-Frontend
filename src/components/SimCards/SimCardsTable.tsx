@@ -1,31 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { SimCard } from '../../types'; // koristi type koji smo napravili
+import React from 'react';
+import { Table, Badge } from 'react-bootstrap';
+import { useAPI } from '../../api/hooks/use-api'; // same as Users table
+import { getSimCards } from '../../api/models/simcard-modul';
+import { SimCard } from '../../types/type-simcard';
 
-const SimCardsTable: React.FC = () => {
-  const [simCards, setSimCards] = useState<SimCard[]>([]);
-  const [loading, setLoading] = useState(true);
+export const SimCardsTable: React.FC = () => {
+  const { data: simCards, loading, error } = useAPI<SimCard[]>(getSimCards);
 
-  useEffect(() => {
-    fetch('http://localhost:3000/api/simcards')
-      .then((res) => {
-        console.log('Response status:', res.status);
-        return res.json();
-      })
-      .then((data) => {
-        console.log('API data:', data);
-        setSimCards(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching simcards:', err);
-        setLoading(false);
-      });
-  }, []);
+  if (loading) return <p>Loading SIM cards...</p>;
+  if (error) return <p>Error loading SIM cards.</p>;
 
-  if (loading) return <p>Loading...</p>;
+  const getReservedBadge = (reserved: boolean) => (
+    <Badge bg={reserved ? 'success' : 'secondary'}>{reserved ? 'Yes' : 'No'}</Badge>
+  );
 
   return (
-    <table>
+    <Table striped bordered hover responsive>
       <thead>
         <tr>
           <th>ID</th>
@@ -39,21 +29,19 @@ const SimCardsTable: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {simCards.map((sim) => (
+        {simCards?.map((sim: SimCard) => (
           <tr key={sim._id}>
             <td>{sim._id}</td>
             <td>{sim.iccid}</td>
             <td>{sim.userId || '-'}</td>
             <td>{sim.providerId || '-'}</td>
             <td>{sim.orderId || '-'}</td>
-            <td>{sim.comment}</td>
-            <td>{sim.reserved ? 'Yes' : 'No'}</td>
-            <td>{new Date(sim.expirationDate).toLocaleDateString()}</td>
+            <td>{sim.comment || '-'}</td>
+            <td>{getReservedBadge(sim.reserved)}</td>
+            <td>{sim.expirationDate ? new Date(sim.expirationDate).toLocaleDateString() : '-'}</td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
-
-export default SimCardsTable;
