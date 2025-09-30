@@ -6,6 +6,6 @@ export interface SimCard {
   orderId: string | null;
   comment: string;
   reserved: boolean;
-  expirationDate: string; // backend vraća Date string
+  expirationDate: string;
 }
 export {};
