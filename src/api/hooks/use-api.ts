@@ -6,10 +6,20 @@ export const useAPI = <T>(fetchFn: () => Promise<T>) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    fetchFn()
-      .then(setData)
-      .catch(setError)
-      .finally(() => setLoading(false));
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        const result = await fetchFn(); // let fetchFn do the request
+        setData(result);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [fetchFn]);
 
   return { data, loading, error };

@@ -3,12 +3,14 @@ import { Table, Image } from 'react-bootstrap';
 import { useAPI } from '../../api/hooks/use-api';
 import { getUsers } from '../../api/models/user-model';
 import { User } from '../../types/type-user';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const UserTable: React.FC = () => {
   const { data: users, loading, error } = useAPI<User[]>(getUsers);
+  const navigate = useNavigate();
 
   if (loading) return <p>Loading users...</p>;
-  if (error) return <p>Error loading users.</p>;
+  if (error) return <p>Error loading users {error.message}</p>;
 
   return (
     <Table striped bordered hover responsive>
@@ -30,7 +32,11 @@ export const UserTable: React.FC = () => {
       </thead>
       <tbody>
         {users?.map((user) => (
-          <tr key={user._id}>
+          <tr
+            key={user._id}
+            style={{ cursor: 'pointer' }}
+            onDoubleClick={() => navigate(`/users/${user._id}`)}
+          >
             <td>{user._id}</td>
             <td>
               {user.profile?.avatarUrl ? (

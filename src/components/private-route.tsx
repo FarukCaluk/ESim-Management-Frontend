@@ -6,8 +6,8 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
-  return isAdmin ? <>{children}</> : <Navigate to="/login" />;
+  const token = localStorage.getItem('token');
+  return token ? <>{children}</> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

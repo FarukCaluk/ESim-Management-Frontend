@@ -8,17 +8,32 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Hardcoded admin credentials
-  const adminEmail = 'admin@example.com';
-  const adminPassword = 'admin123';
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === adminEmail && password === adminPassword) {
-      localStorage.setItem('isAdmin', 'true'); // save login state
-      navigate('/simcards'); // redirect after login
-    } else {
-      setError('Invalid email or password');
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      // Save the JWT token and user role
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('isAdmin', data.user?.type === 'Admin' ? 'true' : 'false');
+
+      // Redirect to /simcards
+      navigate('/simcards');
+    } catch (err) {
+      setError('Something went wrong. Try again.');
     }
   };
 
@@ -26,14 +41,13 @@ export const LoginPage: React.FC = () => {
     <Container className="mt-5">
       <Row className="justify-content-md-center">
         <Col md={6}>
-          <h2>Prijavite se kako biste nastavili</h2>
-          <p>Dobrodošli u eSIMFly Admin Panel</p>
+          <h2>Login to continue</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label>Email adresa</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Unesite vašu email adresu"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -41,10 +55,10 @@ export const LoginPage: React.FC = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>Lozinka</Form.Label>
+              <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="6+ karaktera"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -55,7 +69,7 @@ export const LoginPage: React.FC = () => {
             {error && <p className="text-danger">{error}</p>}
 
             <Button variant="primary" type="submit">
-              Prijava
+              Login
             </Button>
           </Form>
         </Col>
