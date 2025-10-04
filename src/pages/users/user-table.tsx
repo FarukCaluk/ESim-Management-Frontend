@@ -1,13 +1,16 @@
 import React from 'react';
 import { Table, Image } from 'react-bootstrap';
-import { useAPI } from '../../api/hooks/use-api';
-import { getUsers } from '../../api/models/user-model';
-import { User } from '../../types/type-user';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { useAPI } from '../../hooks/use-api';
+import { getUsers } from '../../api/models/user-model';
+import { User } from '../../types/user.types';
 
 export const UserTable: React.FC = () => {
   const { data: users, loading, error } = useAPI<User[]>(getUsers);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (loading) return <p>Loading users...</p>;
   if (error) return <p>Error loading users {error.message}</p>;
@@ -16,18 +19,18 @@ export const UserTable: React.FC = () => {
     <Table striped bordered hover responsive>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Avatar</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Verified</th>
-          <th>Language</th>
-          <th>Currency</th>
-          <th>Type</th>
-          <th>Credits</th>
-          <th>Total Orders</th>
-          <th>Phone</th>
-          <th>Last Gift Order</th>
+          <th>{t('table.id')}</th>
+          <th>{t('table.avatar')}</th>
+          <th>{t('table.name')}</th>
+          <th>{t('table.email')}</th>
+          <th>{t('table.verified')}</th>
+          <th>{t('table.language')}</th>
+          <th>{t('table.currency')}</th>
+          <th>{t('table.type')}</th>
+          <th>{t('table.credits')}</th>
+          <th>{t('table.totalOrders')}</th>
+          <th>{t('table.phone')}</th>
+          <th>{t('table.lastGiftOrder')}</th>
         </tr>
       </thead>
       <tbody>
@@ -47,7 +50,7 @@ export const UserTable: React.FC = () => {
             </td>
             <td>{user.name}</td>
             <td>{user.email}</td>
-            <td>{user.verified ? 'Yes' : 'No'}</td>
+            <td>{user.verified ? t('yes') : t('no')}</td>
             <td>{user.language}</td>
             <td>{user.currency}</td>
             <td>{user.type}</td>

@@ -10,7 +10,7 @@ export const useAPI = <T>(fetchFn: () => Promise<T>) => {
       try {
         const token = localStorage.getItem('token');
 
-        const result = await fetchFn(); // let fetchFn do the request
+        const result = await fetchFn();
         setData(result);
       } catch (err) {
         setError(err as Error);
