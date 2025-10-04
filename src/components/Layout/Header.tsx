@@ -8,6 +8,7 @@ const Header: React.FC<{
   onToggleSidebar?: () => void;
 }> = ({ children, sidebarOpen, onToggleSidebar }) => {
   const { t, i18n } = useTranslation();
+  const role = localStorage.getItem('role');
 
   const handleLogout = () => {
     window.location.href = '/login';
@@ -21,7 +22,9 @@ const Header: React.FC<{
       style={{ minHeight: 80 }}
     >
       <Container fluid className="flex-column align-items-start">
-        <Navbar.Brand style={{ fontSize: '1.5rem', fontWeight: 700 }}>{t('welcome')}</Navbar.Brand>
+        <Navbar.Brand style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+          {role ? `${t('welcome')}, ${role}` : t('welcome')}
+        </Navbar.Brand>
         <div className="d-flex gap-2 mt-2">
           <Button variant="outline-light" size="sm" onClick={() => i18n.changeLanguage('en')}>
             EN
