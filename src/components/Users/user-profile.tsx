@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, Spinner } from 'react-bootstrap';
-import { useAPI } from '../../api/hooks/use-api';
+import { useAPI } from '../../hooks/use-api';
 
 const getUser = async (id: string) => {
   const res = await fetch(`http://localhost:3000/api/users/${id}`);

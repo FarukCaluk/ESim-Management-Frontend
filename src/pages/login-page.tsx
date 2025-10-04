@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -16,10 +16,12 @@ export const LoginPage: React.FC = () => {
       const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: username, password }),
       });
 
       const data = await response.json();
+      console.log('Login response:', data);
+      console.log('Response status:', response.status);
 
       if (!response.ok) {
         setError(data.message || 'Login failed');
@@ -28,10 +30,10 @@ export const LoginPage: React.FC = () => {
 
       // Save the JWT token and user role
       localStorage.setItem('token', data.access_token);
-      localStorage.setItem('isAdmin', data.user?.type === 'Admin' ? 'true' : 'false');
+      localStorage.setItem('role', data.role);
 
-      // Redirect to /simcards
-      navigate('/simcards');
+      // Redirect to role-based welcome page
+      navigate('/simcards'); // or '/users'
     } catch (err) {
       setError('Something went wrong. Try again.');
     }
@@ -43,13 +45,13 @@ export const LoginPage: React.FC = () => {
         <Col md={6}>
           <h2>Login to continue</h2>
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label>Email</Form.Label>
+            <Form.Group className="mb-3" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </Form.Group>

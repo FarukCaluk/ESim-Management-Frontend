@@ -1,31 +1,36 @@
 import React from 'react';
 import { Table, Badge } from 'react-bootstrap';
-import { useAPI } from '../../api/hooks/use-api'; // same as Users table
+import { useTranslation } from 'react-i18next';
+
+import { useAPI } from '../../hooks/use-api';
 import { getSimCards } from '../../api/models/simcard-modul';
-import { SimCard } from '../../types/type-simcard';
+import { SimCard } from '../../types/simcard.types';
 
 export const SimCardsTable: React.FC = () => {
   const { data: simCards, loading, error } = useAPI<SimCard[]>(getSimCards);
+  const { t } = useTranslation();
 
-  if (loading) return <p>Loading SIM cards...</p>;
-  if (error) return <p>Error loading SIM cards.</p>;
+  if (loading) return <p>{t('loadingSimCards')}</p>;
+  if (error) return <p>{t('errorLoadingSimCards')}</p>;
 
   const getReservedBadge = (reserved: boolean) => (
-    <Badge bg={reserved ? 'success' : 'secondary'}>{reserved ? 'Yes' : 'No'}</Badge>
+    <Badge bg={reserved ? 'success' : 'secondary'}>
+      {reserved ? t('table.yes') : t('table.no')}
+    </Badge>
   );
 
   return (
     <Table striped bordered hover responsive>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>ICCID</th>
-          <th>User ID</th>
-          <th>Provider ID</th>
-          <th>Order ID</th>
-          <th>Comment</th>
-          <th>Reserved</th>
-          <th>Expiration</th>
+          <th>{t('table.simcardId')}</th>
+          <th>{t('table.iccid')}</th>
+          <th>{t('table.userId')}</th>
+          <th>{t('table.providerId')}</th>
+          <th>{t('table.orderId')}</th>
+          <th>{t('table.comment')}</th>
+          <th>{t('table.reserved')}</th>
+          <th>{t('table.expiration')}</th>
         </tr>
       </thead>
       <tbody>

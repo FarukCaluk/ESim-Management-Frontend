@@ -1,8 +1,7 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import { FaIdCard, FaUsers } from 'react-icons/fa'; // Only use these two
-import './Layout.css';
+import '../../styles/layout.css';
 
 const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();

@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from '../pages/login-page';
-import { SimCardsTable } from '../components/SimCards/sim-cards-table';
-import { UserTable } from '../components/Users/user-table';
+import { SimCardsTable } from '../pages/simcards/sim-cards-table';
+import { UserTable } from '../pages/users/user-table';
 import PrivateRoute from '../components/private-route';
-import MainLayout from '../components/Layout/MainLayout';
-import UserProfile from '../components/Users/user-profile';
+import MainLayout from '../components/layout/mainlayout';
+import UserProfile from '../components/users/user-profile';
 
 function App() {
   return (
