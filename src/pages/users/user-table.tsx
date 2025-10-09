@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAPI } from '../../hooks/use-api';
-import { getUsers } from '../../api/models/user-model';
+import { getUsers } from '../../api/models/user-modul';
 import { User } from '../../types/user.types';
 
 export const UserTable: React.FC = () => {
@@ -19,18 +19,18 @@ export const UserTable: React.FC = () => {
     <Table striped bordered hover responsive>
       <thead>
         <tr>
-          <th>{t('table.id')}</th>
-          <th>{t('table.avatar')}</th>
-          <th>{t('table.name')}</th>
-          <th>{t('table.email')}</th>
-          <th>{t('table.verified')}</th>
-          <th>{t('table.language')}</th>
-          <th>{t('table.currency')}</th>
-          <th>{t('table.type')}</th>
-          <th>{t('table.credits')}</th>
-          <th>{t('table.totalOrders')}</th>
-          <th>{t('table.phone')}</th>
-          <th>{t('table.lastGiftOrder')}</th>
+          <th>{t('users.table.id')}</th>
+          <th>{t('users.table.avatar')}</th>
+          <th>{t('users.table.name')}</th>
+          <th>{t('users.table.email')}</th>
+          <th>{t('users.table.verified')}</th>
+          <th>{t('users.table.language')}</th>
+          <th>{t('users.table.currency')}</th>
+          <th>{t('users.table.type')}</th>
+          <th>{t('users.table.credits')}</th>
+          <th>{t('users.table.totalOrders')}</th>
+          <th>{t('users.table.phone')}</th>
+          <th>{t('users.table.lastGiftOrder')}</th>
         </tr>
       </thead>
       <tbody>

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
 interface PrivateRouteProps {
-  children: React.ReactNode;
+  children: ReactNode;
+  allowedRoles?: string[];
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) => {
   const token = localStorage.getItem('token');
-  return token ? <>{children}</> : <Navigate to="/login" />;
+  const role = localStorage.getItem('role') || '';
+
+  if (!token) return <Navigate to="/login" />;
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) return <Navigate to="/login" />;
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

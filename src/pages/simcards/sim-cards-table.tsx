@@ -14,23 +14,21 @@ export const SimCardsTable: React.FC = () => {
   if (error) return <p>{t('errorLoadingSimCards')}</p>;
 
   const getReservedBadge = (reserved: boolean) => (
-    <Badge bg={reserved ? 'success' : 'secondary'}>
-      {reserved ? t('table.yes') : t('table.no')}
-    </Badge>
+    <Badge bg={reserved ? 'success' : 'secondary'}>{reserved ? t('yes') : t('no')}</Badge>
   );
 
   return (
     <Table striped bordered hover responsive>
       <thead>
         <tr>
-          <th>{t('table.simcardId')}</th>
-          <th>{t('table.iccid')}</th>
-          <th>{t('table.userId')}</th>
-          <th>{t('table.providerId')}</th>
-          <th>{t('table.orderId')}</th>
-          <th>{t('table.comment')}</th>
-          <th>{t('table.reserved')}</th>
-          <th>{t('table.expiration')}</th>
+          <th>{t('simcards.table.simcardId')}</th>
+          <th>{t('simcards.table.iccid')}</th>
+          <th>{t('simcards.table.userId')}</th>
+          <th>{t('simcards.table.providerId')}</th>
+          <th>{t('simcards.table.orderId')}</th>
+          <th>{t('simcards.table.comment')}</th>
+          <th>{t('simcards.table.reserved')}</th>
+          <th>{t('simcards.table.expiration')}</th>
         </tr>
       </thead>
       <tbody>

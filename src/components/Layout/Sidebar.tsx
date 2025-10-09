@@ -5,6 +5,7 @@ import '../../styles/layout.css';
 
 const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();
+  const role = localStorage.getItem('role');
 
   return (
     <div
@@ -23,14 +24,26 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               SIM Cards
             </Link>
           </Nav.Item>
-          <Nav.Item>
-            <Link
-              to="/users"
-              className={`nav-link${location.pathname === '/users' ? ' active' : ''}`}
-            >
-              Users
-            </Link>
-          </Nav.Item>
+          {role === 'admin' && (
+            <Nav.Item>
+              <Link
+                to="/users"
+                className={`nav-link${location.pathname === '/users' ? ' active' : ''}`}
+              >
+                Users
+              </Link>
+            </Nav.Item>
+          )}
+          {(role === 'admin' || role === 'support') && (
+            <Nav.Item>
+              <Link
+                to="/packages"
+                className={`nav-link${location.pathname === '/packages' ? ' active' : ''}`}
+              >
+                Packages
+              </Link>
+            </Nav.Item>
+          )}
         </Nav>
       </div>
     </div>

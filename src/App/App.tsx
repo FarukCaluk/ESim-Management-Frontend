@@ -7,6 +7,7 @@ import { UserTable } from '../pages/users/user-table';
 import PrivateRoute from '../components/private-route';
 import MainLayout from '../components/layout/mainlayout';
 import UserProfile from '../components/users/user-profile';
+import { PackagesTable } from '../pages/packages/packages-table';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route
           path="/simcards"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['admin', 'support', 'user']}>
               <MainLayout>
                 <h1>SIM Cards</h1>
                 <SimCardsTable />
@@ -30,7 +31,7 @@ function App() {
         <Route
           path="/users"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['admin']}>
               <MainLayout>
                 <h1>Users</h1>
                 <UserTable />
@@ -41,9 +42,20 @@ function App() {
         <Route
           path="/users/:id"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['admin']}>
               <MainLayout>
                 <UserProfile />
+              </MainLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/packages"
+          element={
+            <PrivateRoute allowedRoles={['admin', 'support']}>
+              <MainLayout>
+                <h1>Packages</h1>
+                <PackagesTable />
               </MainLayout>
             </PrivateRoute>
           }

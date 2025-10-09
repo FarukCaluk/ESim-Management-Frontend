@@ -1,0 +1,8 @@
+{
+  "packages": "Packages",
+  "packages.table.id": "ID",
+  "packages.table.name": "Name",
+  "packages.table.volume": "Volume",
+  "packages.table.days": "Days",
+  "packages.table.providerPrice": "Provider Price"
+}

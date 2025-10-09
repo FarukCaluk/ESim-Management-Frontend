@@ -28,12 +28,10 @@ export const LoginPage: React.FC = () => {
         return;
       }
 
-      // Save the JWT token and user role
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('role', data.role);
 
-      // Redirect to role-based welcome page
-      navigate('/simcards'); // or '/users'
+      navigate('/simcards');
     } catch (err) {
       setError('Something went wrong. Try again.');
     }

@@ -1,0 +1,11 @@
+{
+  "simcards": "SIM kartice",
+  "simcards.table.simcardId": "ID",
+  "simcards.table.iccid": "ICCID",
+  "simcards.table.userId": "ID korisnika",
+  "simcards.table.providerId": "ID provajdera",
+  "simcards.table.orderId": "ID narudžbe",
+  "simcards.table.comment": "Komentar",
+  "simcards.table.reserved": "Rezervisana",
+  "simcards.table.expiration": "Ističe"
+}

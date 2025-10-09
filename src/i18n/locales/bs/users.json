@@ -1,0 +1,15 @@
+{
+  "users": "Korisnici",
+  "users.table.id": "ID",
+  "users.table.avatar": "Avatar",
+  "users.table.name": "Ime",
+  "users.table.email": "Email",
+  "users.table.verified": "Verifikovan",
+  "users.table.language": "Jezik",
+  "users.table.currency": "Valuta",
+  "users.table.type": "Tip",
+  "users.table.credits": "Krediti",
+  "users.table.totalOrders": "Ukupno narudžbi",
+  "users.table.phone": "Telefon",
+  "users.table.lastGiftOrder": "Zadnja poklon narudžba"
+}
