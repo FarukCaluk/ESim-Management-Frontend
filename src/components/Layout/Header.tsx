@@ -1,15 +1,15 @@
 import React from 'react';
 import { Navbar, Container, Button, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { clearAuth } from '../../utils/auth';
+import { ROUTES } from '../../constants/routes';
 
 const Header: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { t, i18n } = useTranslation();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('isAdmin');
-    window.location.href = '/login';
+    clearAuth();
+    window.location.href = ROUTES.LOGIN;
   };
 
   const changeLanguage = (lng: string) => {

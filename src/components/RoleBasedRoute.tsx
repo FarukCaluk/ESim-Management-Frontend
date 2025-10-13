@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserRole } from '../constants/roles';
+import { ROUTES } from '../constants/routes';
 
 interface RoleBasedRouteProps {
   children: React.ReactNode;
@@ -23,7 +24,7 @@ interface RoleBasedRouteProps {
 const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ 
   children, 
   allowedRoles, 
-  redirectTo = '/login' 
+  redirectTo = ROUTES.LOGIN
 }) => {
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
@@ -39,8 +40,8 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
   }
 
   // User is authenticated but doesn't have required role
-  // Redirect to unauthorized page or default route
-  return <Navigate to="/simcards" />;
+  // Redirect to default route (simcards)
+  return <Navigate to={ROUTES.SIMCARDS} />;
 };
 
 export default RoleBasedRoute;

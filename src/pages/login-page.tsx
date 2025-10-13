@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../constants/routes';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ export const LoginPage: React.FC = () => {
       localStorage.setItem('isAdmin', data.user?.type === 'Admin' ? 'true' : 'false');
 
       // Redirect to /simcards
-      navigate('/simcards');
+      navigate(ROUTES.SIMCARDS);
     } catch (err) {
       setError(t('auth:errorOccurred'));
     }

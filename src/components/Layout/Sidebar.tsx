@@ -2,6 +2,7 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../../constants/routes';
 import './Layout.css';
 
 const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
@@ -19,16 +20,16 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
         <Nav className="flex-column">
           <Nav.Item>
             <Link
-              to="/simcards"
-              className={`nav-link${location.pathname === '/simcards' ? ' active' : ''}`}
+              to={ROUTES.SIMCARDS}
+              className={`nav-link${location.pathname === ROUTES.SIMCARDS ? ' active' : ''}`}
             >
               {t('simcards:simCards')}
             </Link>
           </Nav.Item>
           <Nav.Item>
             <Link
-              to="/users"
-              className={`nav-link${location.pathname === '/users' ? ' active' : ''}`}
+              to={ROUTES.USERS}
+              className={`nav-link${location.pathname === ROUTES.USERS ? ' active' : ''}`}
             >
               {t('users:title')}
             </Link>
