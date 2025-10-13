@@ -1,0 +1,19 @@
+{
+  "title": "Users",
+  "loadingUsers": "Loading users...",
+  "errorLoadingUsers": "Error loading users",
+  "table": {
+    "id": "ID",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "verified": "Verified",
+    "language": "Language",
+    "currency": "Currency",
+    "type": "Type",
+    "credits": "Credits",
+    "totalOrders": "Total Orders",
+    "phone": "Phone",
+    "lastGiftOrder": "Last Gift Order"
+  }
+}

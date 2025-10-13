@@ -1,0 +1,15 @@
+{
+  "appName": "ESim Verwaltung",
+  "logout": "Abmelden",
+  "loading": "Lädt...",
+  "error": "Fehler",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "delete": "Löschen",
+  "edit": "Bearbeiten",
+  "yes": "Ja",
+  "no": "Nein",
+  "notAvailable": "N/V",
+  "hideSidebar": "Seitenleiste ausblenden",
+  "showSidebar": "Seitenleiste anzeigen"
+}

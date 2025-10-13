@@ -1,0 +1,15 @@
+{
+  "appName": "ESim Management",
+  "logout": "Logout",
+  "loading": "Loading...",
+  "error": "Error",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "yes": "Yes",
+  "no": "No",
+  "notAvailable": "N/A",
+  "hideSidebar": "Hide Sidebar",
+  "showSidebar": "Show Sidebar"
+}

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import { FaIdCard, FaUsers } from 'react-icons/fa'; // Only use these two
+import { useTranslation } from 'react-i18next';
 import './Layout.css';
 
 const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -13,7 +14,7 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
     >
       <div>
         <div className="d-flex justify-content-between align-items-center px-2">
-          <h4 className="mb-4">ESim Manager</h4>
+          <h4 className="mb-4">{t('simcards:title')}</h4>
         </div>
         <Nav className="flex-column">
           <Nav.Item>
@@ -21,7 +22,7 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               to="/simcards"
               className={`nav-link${location.pathname === '/simcards' ? ' active' : ''}`}
             >
-              SIM Cards
+              {t('simcards:simCards')}
             </Link>
           </Nav.Item>
           <Nav.Item>
@@ -29,7 +30,7 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               to="/users"
               className={`nav-link${location.pathname === '/users' ? ' active' : ''}`}
             >
-              Users
+              {t('users:title')}
             </Link>
           </Nav.Item>
         </Nav>

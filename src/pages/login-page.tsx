@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,18 +24,19 @@ export const LoginPage: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || 'Login failed');
+        setError(data.message || t('auth:loginFailed'));
         return;
       }
 
       // Save the JWT token and user role
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('userRole', data.user?.type || 'User');
       localStorage.setItem('isAdmin', data.user?.type === 'Admin' ? 'true' : 'false');
 
       // Redirect to /simcards
       navigate('/simcards');
     } catch (err) {
-      setError('Something went wrong. Try again.');
+      setError(t('auth:errorOccurred'));
     }
   };
 
@@ -41,13 +44,13 @@ export const LoginPage: React.FC = () => {
     <Container className="mt-5">
       <Row className="justify-content-md-center">
         <Col md={6}>
-          <h2>Login to continue</h2>
+          <h2>{t('auth:loginTitle')}</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>{t('auth:email')}</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t('auth:emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -55,10 +58,10 @@ export const LoginPage: React.FC = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>{t('auth:password')}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t('auth:passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -69,7 +72,7 @@ export const LoginPage: React.FC = () => {
             {error && <p className="text-danger">{error}</p>}
 
             <Button variant="primary" type="submit">
-              Login
+              {t('auth:loginButton')}
             </Button>
           </Form>
         </Col>

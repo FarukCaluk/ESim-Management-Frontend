@@ -5,8 +5,10 @@ import LoginPage from '../pages/login-page';
 import { SimCardsTable } from '../components/SimCards/sim-cards-table';
 import { UserTable } from '../components/Users/user-table';
 import PrivateRoute from '../components/private-route';
+import RoleBasedRoute from '../components/RoleBasedRoute';
 import MainLayout from '../components/Layout/MainLayout';
 import UserProfile from '../components/Users/user-profile';
+import { UserRole } from '../constants/roles';
 
 function App() {
   return (
@@ -15,7 +17,7 @@ function App() {
         {/* Login route (public) */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected routes */}
+        {/* Protected routes - accessible to all authenticated users */}
         <Route
           path="/simcards"
           element={
@@ -27,25 +29,27 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Admin-only routes - role-based protection */}
         <Route
           path="/users"
           element={
-            <PrivateRoute>
+            <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
               <MainLayout>
                 <h1>Users</h1>
                 <UserTable />
               </MainLayout>
-            </PrivateRoute>
+            </RoleBasedRoute>
           }
         />
         <Route
           path="/users/:id"
           element={
-            <PrivateRoute>
+            <RoleBasedRoute allowedRoles={[UserRole.ADMIN]}>
               <MainLayout>
                 <UserProfile />
               </MainLayout>
-            </PrivateRoute>
+            </RoleBasedRoute>
           }
         />
 

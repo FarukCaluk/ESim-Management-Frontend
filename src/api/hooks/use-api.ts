@@ -8,8 +8,6 @@ export const useAPI = <T>(fetchFn: () => Promise<T>) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-
         const result = await fetchFn(); // let fetchFn do the request
         setData(result);
       } catch (err) {

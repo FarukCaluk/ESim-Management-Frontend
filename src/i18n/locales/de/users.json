@@ -1,0 +1,19 @@
+{
+  "title": "Benutzer",
+  "loadingUsers": "Lade Benutzer...",
+  "errorLoadingUsers": "Fehler beim Laden der Benutzer",
+  "table": {
+    "id": "ID",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "E-Mail",
+    "verified": "Verifiziert",
+    "language": "Sprache",
+    "currency": "Währung",
+    "type": "Typ",
+    "credits": "Guthaben",
+    "totalOrders": "Gesamtbestellungen",
+    "phone": "Telefon",
+    "lastGiftOrder": "Letzte Geschenkbestellung"
+  }
+}
