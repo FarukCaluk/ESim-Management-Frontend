@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useAPI } from '../../hooks/use-api';
-import { getPackages } from '../../api/models/package-modul';
-import { Package } from '../../types/package.types';
+import { useAPI } from '../../../hooks/use-api';
+import { getPackages } from '../../../api/models/package-modul';
+import { Package } from '../../../types/package.types';
 
 export const PackagesTable: React.FC = () => {
   const { data: packages, loading, error } = useAPI<Package[]>(getPackages);

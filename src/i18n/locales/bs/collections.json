@@ -1,0 +1,10 @@
+{
+  "collections": "Kolekcije",
+  "collections.table.id": "ID",
+  "collections.table.name": "Naziv",
+  "collections.table.country": "Država",
+  "collections.table.expirationDate": "Datum isteka",
+  "collections.table.createdBy": "Kreirao",
+  "collections.table.assignedAgency": "Dodijeljena agencija",
+  "collections.table.plans": "Planovi"
+}

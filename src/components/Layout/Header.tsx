@@ -11,6 +11,8 @@ const Header: React.FC<{
   const role = localStorage.getItem('role');
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     window.location.href = '/login';
   };
 
@@ -54,4 +56,3 @@ const Header: React.FC<{
 };
 
 export default Header;
-// filepath: c:\Users\Korisnik\Desktop\ESim-Management-Frontend\esim-frontend\src\components\Layout\Header.tsx

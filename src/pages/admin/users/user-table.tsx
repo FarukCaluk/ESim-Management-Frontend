@@ -3,11 +3,15 @@ import { Table, Image } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useAPI } from '../../hooks/use-api';
-import { getUsers } from '../../api/models/user-modul';
-import { User } from '../../types/user.types';
+import { useAPI } from '../../../hooks/use-api';
+import { getUsers } from '../../../api/models/user-modul';
+import { User } from '../../../types/user.types';
 
-export const UserTable: React.FC = () => {
+interface UserTableProps {
+  readOnly?: boolean;
+}
+
+export const UserTable: React.FC<UserTableProps> = ({ readOnly = false }) => {
   const { data: users, loading, error } = useAPI<User[]>(getUsers);
   const navigate = useNavigate();
   const { t } = useTranslation();

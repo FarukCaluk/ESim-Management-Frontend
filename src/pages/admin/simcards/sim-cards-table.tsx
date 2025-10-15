@@ -2,9 +2,9 @@ import React from 'react';
 import { Table, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { useAPI } from '../../hooks/use-api';
-import { getSimCards } from '../../api/models/simcard-modul';
-import { SimCard } from '../../types/simcard.types';
+import { useAPI } from '../../../hooks/use-api';
+import { getSimCards } from '../../../api/models/simcard-modul';
+import { SimCard } from '../../../types/simcard.types';
 
 export const SimCardsTable: React.FC = () => {
   const { data: simCards, loading, error } = useAPI<SimCard[]>(getSimCards);

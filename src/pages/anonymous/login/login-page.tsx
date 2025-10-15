@@ -31,7 +31,8 @@ export const LoginPage: React.FC = () => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('role', data.role);
 
-      navigate('/simcards');
+      navigate('/dashboard');
+      window.location.reload();
     } catch (err) {
       setError('Something went wrong. Try again.');
     }

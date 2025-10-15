@@ -16,15 +16,28 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
           <h4 className="mb-4">ESim Manager</h4>
         </div>
         <Nav className="flex-column">
+          {/* Dashboard: all roles */}
           <Nav.Item>
             <Link
-              to="/simcards"
-              className={`nav-link${location.pathname === '/simcards' ? ' active' : ''}`}
+              to="/dashboard"
+              className={`nav-link${location.pathname === '/dashboard' ? ' active' : ''}`}
             >
-              SIM Cards
+              Dashboard
             </Link>
           </Nav.Item>
-          {role === 'admin' && (
+          {/* SIM Cards: admin, support, agency */}
+          {(role === 'admin' || role === 'support' || role === 'agency') && (
+            <Nav.Item>
+              <Link
+                to="/simcards"
+                className={`nav-link${location.pathname === '/simcards' ? ' active' : ''}`}
+              >
+                SIM Cards
+              </Link>
+            </Nav.Item>
+          )}
+          {/* Users: admin, support */}
+          {(role === 'admin' || role === 'support') && (
             <Nav.Item>
               <Link
                 to="/users"
@@ -34,6 +47,7 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               </Link>
             </Nav.Item>
           )}
+          {/* Packages: admin, support */}
           {(role === 'admin' || role === 'support') && (
             <Nav.Item>
               <Link
@@ -41,6 +55,28 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
                 className={`nav-link${location.pathname === '/packages' ? ' active' : ''}`}
               >
                 Packages
+              </Link>
+            </Nav.Item>
+          )}
+          {/* Collections: admin, support, agency */}
+          {(role === 'admin' || role === 'support' || role === 'agency') && (
+            <Nav.Item>
+              <Link
+                to="/collections"
+                className={`nav-link${location.pathname === '/collections' ? ' active' : ''}`}
+              >
+                Collections
+              </Link>
+            </Nav.Item>
+          )}
+          {/* Plans: admin, support, agency */}
+          {(role === 'admin' || role === 'support' || role === 'agency') && (
+            <Nav.Item>
+              <Link
+                to="/plans"
+                className={`nav-link${location.pathname === '/plans' ? ' active' : ''}`}
+              >
+                Plans
               </Link>
             </Nav.Item>
           )}
