@@ -2,10 +2,11 @@ import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/layout.css';
+import { Role } from '../../types/roles';
 
 const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
   const location = useLocation();
-  const role = localStorage.getItem('role');
+  const roleValue = localStorage.getItem('role') as Role | null;
 
   return (
     <div
@@ -25,8 +26,11 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               Dashboard
             </Link>
           </Nav.Item>
+
           {/* SIM Cards: admin, support, agency */}
-          {(role === 'admin' || role === 'support' || role === 'agency') && (
+          {(roleValue === Role.Admin ||
+            roleValue === Role.Support ||
+            roleValue === Role.Agency) && (
             <Nav.Item>
               <Link
                 to="/simcards"
@@ -36,8 +40,9 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               </Link>
             </Nav.Item>
           )}
+
           {/* Users: admin, support */}
-          {(role === 'admin' || role === 'support') && (
+          {(roleValue === Role.Admin || roleValue === Role.Support) && (
             <Nav.Item>
               <Link
                 to="/users"
@@ -47,8 +52,9 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               </Link>
             </Nav.Item>
           )}
+
           {/* Packages: admin, support */}
-          {(role === 'admin' || role === 'support') && (
+          {(roleValue === Role.Admin || roleValue === Role.Support) && (
             <Nav.Item>
               <Link
                 to="/packages"
@@ -58,8 +64,11 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               </Link>
             </Nav.Item>
           )}
+
           {/* Collections: admin, support, agency */}
-          {(role === 'admin' || role === 'support' || role === 'agency') && (
+          {(roleValue === Role.Admin ||
+            roleValue === Role.Support ||
+            roleValue === Role.Agency) && (
             <Nav.Item>
               <Link
                 to="/collections"
@@ -69,8 +78,11 @@ const Sidebar: React.FC<{ open: boolean }> = ({ open }) => {
               </Link>
             </Nav.Item>
           )}
+
           {/* Plans: admin, support, agency */}
-          {(role === 'admin' || role === 'support' || role === 'agency') && (
+          {(roleValue === Role.Admin ||
+            roleValue === Role.Support ||
+            roleValue === Role.Agency) && (
             <Nav.Item>
               <Link
                 to="/plans"

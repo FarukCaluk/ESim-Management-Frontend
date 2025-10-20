@@ -37,3 +37,5 @@ export const PackagesTable: React.FC = () => {
     </Table>
   );
 };
+
+export default PackagesTable;

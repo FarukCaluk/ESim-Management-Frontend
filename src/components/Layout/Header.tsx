@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Role } from '../../types/roles';
 
 const Header: React.FC<{
   children?: React.ReactNode;
@@ -8,7 +9,7 @@ const Header: React.FC<{
   onToggleSidebar?: () => void;
 }> = ({ children, sidebarOpen, onToggleSidebar }) => {
   const { t, i18n } = useTranslation();
-  const role = localStorage.getItem('role');
+  const role = (localStorage.getItem('role') || null) as Role | null;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -30,9 +31,6 @@ const Header: React.FC<{
         <div className="d-flex gap-2 mt-2">
           <Button variant="outline-light" size="sm" onClick={() => i18n.changeLanguage('en')}>
             EN
-          </Button>
-          <Button variant="outline-light" size="sm" onClick={() => i18n.changeLanguage('bs')}>
-            BS
           </Button>
           {onToggleSidebar && (
             <Button variant="outline-light" size="sm" onClick={onToggleSidebar}>

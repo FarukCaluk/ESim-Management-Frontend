@@ -1,26 +1,25 @@
 import api from '../../utils/api-client';
+import { User, CreateUserPayload } from '../../types/user';
 
-export const listUsers = async () => {
-  const res = await api.get('/admin/users');
+export const listUsers = async (): Promise<User[]> => {
+  const res = await api.get<User[]>('/admin/users');
   return res.data;
 };
 
-export const createUser = async (user: any) => {
-  const res = await api.post('/admin/users', user);
+export const createUser = async (user: CreateUserPayload): Promise<User> => {
+  const res = await api.post<User>('/admin/users', user);
   return res.data;
 };
 
-export const editUser = async (id: string, user: any) => {
-  const res = await api.put(`/admin/users/${id}`, user);
+export const editUser = async (id: string, user: CreateUserPayload): Promise<User> => {
+  const res = await api.put<User>(`/admin/users/${id}`, user);
   return res.data;
 };
 
-export const deleteUser = async (id: string) => {
-  const res = await api.delete(`/admin/users/${id}`);
-  return res.data;
+export const deleteUser = async (id: string): Promise<void> => {
+  await api.delete(`/admin/users/${id}`);
 };
 
-export const blockUser = async (id: string) => {
-  const res = await api.post(`/admin/users/${id}/block`);
-  return res.data;
+export const blockUser = async (id: string): Promise<void> => {
+  await api.post(`/admin/users/${id}/block`);
 };

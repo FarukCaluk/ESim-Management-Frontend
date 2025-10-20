@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { login } from '../../../api/auth';
+import { Role } from '../../../types/roles';
 
-export const LoginPage: React.FC = () => {
+const LoginPage: React.FC<{ onLogin?: (role: Role) => void }> = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -11,30 +13,14 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: username, password }),
-      });
-
-      const data = await response.json();
-      console.log('Login response:', data);
-      console.log('Response status:', response.status);
-
-      if (!response.ok) {
-        setError(data.message || 'Login failed');
-        return;
-      }
-
+      const data = await login({ email: username, password });
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('role', data.role);
-
+      onLogin?.(data.role as Role);
       navigate('/dashboard');
-      window.location.reload();
-    } catch (err) {
-      setError('Something went wrong. Try again.');
+    } catch (err: any) {
+      setError(err?.response?.data?.message || 'Login failed');
     }
   };
 

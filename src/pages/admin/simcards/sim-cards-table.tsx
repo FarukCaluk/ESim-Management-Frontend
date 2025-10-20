@@ -48,3 +48,5 @@ export const SimCardsTable: React.FC = () => {
     </Table>
   );
 };
+
+export default SimCardsTable;

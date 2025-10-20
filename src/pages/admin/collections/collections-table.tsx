@@ -41,3 +41,5 @@ export const CollectionsTable: React.FC = () => {
     </Table>
   );
 };
+
+export default CollectionsTable;

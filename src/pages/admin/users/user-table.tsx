@@ -68,3 +68,5 @@ export const UserTable: React.FC<UserTableProps> = ({ readOnly = false }) => {
     </Table>
   );
 };
+
+export default UserTable;

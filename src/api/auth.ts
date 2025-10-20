@@ -1,10 +1,17 @@
-export const login = async (credentials: any) => {
-  const res = await fetch(`${process.env.API_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  });
-  return res.json();
+import api from '../utils/api-client';
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+export interface LoginResponse {
+  access_token: string;
+  role: string;
+}
+
+export const login = async (credentials: LoginPayload): Promise<LoginResponse> => {
+  const res = await api.post('/auth/login', credentials);
+  return res.data;
 };
 
 export const register = async (data: any) => {
