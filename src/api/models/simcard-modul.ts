@@ -1,4 +1,4 @@
-import { api } from '../common-api';
+import api from '../../utils/api-client';
 import { SimCard } from '../../types/simcard.types';
 
 export const getSimCards = async (): Promise<SimCard[]> => {

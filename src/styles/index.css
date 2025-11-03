@@ -1,3 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* quick sanity styles */
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family:

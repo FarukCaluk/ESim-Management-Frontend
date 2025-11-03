@@ -1,3 +1,40 @@
+/* Stormy morning palette
+   #88BDF2 (primary), #6A89A7 (secondary), #BDDDFC (tint), #384959 (fg) */
+
+/* Add at top (or keep near your other :root tokens) */
+:root {
+  --background: 210 40% 98%; /* very light blue-ish bg */
+  --foreground: 209 23% 28%; /* #384959 */
+
+  --card: 0 0% 100%;
+  --card-foreground: var(--foreground);
+
+  --popover: 0 0% 100%;
+  --popover-foreground: var(--foreground);
+
+  /* Primary uses #88BDF2 */
+  --primary: 210 80% 74%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary uses #6A89A7 */
+  --secondary: 209 26% 53%;
+  --secondary-foreground: 0 0% 100%;
+
+  /* Soft tint from #BDDDFC */
+  --muted: 210 92% 86%;
+  --muted-foreground: 209 23% 30%;
+
+  --accent: 210 92% 86%;
+  --accent-foreground: 209 23% 28%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 210 24% 90%;
+  --input: 210 24% 90%;
+  --ring: 210 80% 60%;
+}
+
 .sidebar {
   min-width: 220px;
   max-width: 220px;
@@ -37,6 +74,17 @@
   transition:
     background 0.2s,
     color 0.2s;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link .icon {
+  flex: 0 0 18px;
+}
+
+.nav-link .label {
+  white-space: nowrap;
 }
 
 .nav-link.active,
@@ -86,4 +134,170 @@ header.navbar {
   .flex-grow-1 {
     margin-left: 0;
   }
+}
+
+.sidebar-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  padding: 0 16px;
+  border-top: 1px solid #e3e3e3;
+  padding-top: 12px;
+  background: linear-gradient(to bottom, rgba(248, 249, 250, 0), #f8f9fa 60%);
+}
+
+.sidebar .nav-link svg {
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+
+/* footer actions */
+.sidebar-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+.nav-icon-btn:hover {
+  background: #f3f4f6;
+}
+
+/* collapsed state keeps icons, hides labels */
+.sidebar.collapsed .nav-link .label {
+  display: none;
+}
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+}
+
+/* Optional: make button fill width nicely */
+.sidebar .sidebar-footer .nav-link {
+  width: 100%;
+}
+
+/* widths */
+:root {
+  --sidebar-open: 260px;
+  --sidebar-collapsed: 72px;
+}
+
+/* Sidebar widths */
+:root {
+  --sb-open: 260px;
+  --sb-collapsed: 72px;
+}
+
+/* Sidebar and main content shift */
+.app-shell .app-main {
+  margin-left: var(--sb-open);
+  padding-left: 0; /* ensure no extra left padding here */
+  transition: margin-left 0.2s ease;
+}
+.app-shell.sidebar-collapsed .app-main {
+  margin-left: var(--sb-collapsed);
+}
+
+/* Base sidebar */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sb-open);
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  transition: width 0.2s ease;
+  z-index: 100;
+}
+.sidebar.collapsed {
+  width: var(--sb-collapsed);
+}
+
+.sidebar-inner {
+  position: relative;
+  height: 100%;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+/* Keep icons visible; hide only labels when collapsed */
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+}
+.sidebar .nav-link .icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+.sidebar .nav-link .label {
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-header h4 {
+  display: none;
+}
+.sidebar.collapsed .nav-link .label {
+  display: none !important;
+}
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Footer so Logout is always visible */
+.sidebar-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  padding: 8px 12px 0;
+  border-top: 1px solid #e5e7eb;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 60%);
+}
+.sidebar-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+.nav-icon-btn:hover {
+  background: #f3f4f6;
+}
+
+/* Position the floating action just to the right of the sidebar */
+.edge-actions {
+  position: fixed;
+  top: 16px;
+  left: calc(var(--sb-open) + 8px);
+  z-index: 110;
+}
+.app-shell.sidebar-collapsed .edge-actions {
+  left: calc(var(--sb-collapsed) + 8px);
 }
