@@ -51,10 +51,7 @@ export default function Dashboard() {
             <StatCard label="Total Users" value={stats?.users ?? 0} />
             <StatCard label="Total Plans" value={stats?.plans ?? 0} />
             <StatCard label="Total Collections" value={stats?.collections ?? 0} />
-            <StatCard
-              label="Total Revenue"
-              value={stats?.revenue != null ? `$${stats?.revenue.toLocaleString()}` : '—'}
-            />
+            <StatCard label="Total Simcards" value={stats?.simcards ?? 0} />
           </>
         )}
       </div>

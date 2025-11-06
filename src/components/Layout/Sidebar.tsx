@@ -2,8 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Role } from '../../types/roles';
 import {
-  ChevronLeft,
-  ChevronRight,
   LayoutDashboard,
   CreditCard,
   Users as UsersIcon,
@@ -15,10 +13,10 @@ import {
 
 type SidebarProps = {
   collapsed?: boolean;
-  onToggleCollapsed?: () => void;
+  onToggleCollapsed?: () => void; // kept for compatibility, not used here
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggleCollapsed }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed = false /*, onToggleCollapsed*/ }) => {
   const location = useLocation();
   const rawRole = sessionStorage.getItem('role') || localStorage.getItem('role');
   const roleValue = (rawRole as Role | null) ?? null;
@@ -91,16 +89,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggleCollapsed 
   return (
     <aside
       className={[
-        'fixed left-0 top-0 z-40 h-screen border-r bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/75',
+        'fixed left-0 top-0 z-40 h-screen border-r border-border/80 bg-white/90 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/70',
         'transition-[width] duration-200',
         railWidth,
       ].join(' ')}
       aria-label="Sidebar"
     >
       <div className="flex h-full flex-col">
-        {/* Brand */}
+        {/* Brand (removed local collapse control; use Header button) */}
         <div className="flex items-center gap-3 px-3 py-4">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-blue-600 text-sm font-semibold text-white">
+          <div className="grid h-9 w-9 place-items-center rounded-md bg-blue-600 text-sm font-semibold text-white shadow-sm">
             E
           </div>
           {!collapsed && (
@@ -118,8 +116,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggleCollapsed 
                   'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
                   collapsed ? 'justify-center' : '',
                   active
-                    ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-100'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                    ? 'bg-blue-600/10 text-blue-800 ring-1 ring-inset ring-blue-600/20'
+                    : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900',
                 ].join(' ')}
                 title={collapsed ? label : undefined}
               >
@@ -148,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggleCollapsed 
               onClick={handleLogout}
               className={
                 collapsed
-                  ? 'inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-slate-100'
+                  ? 'inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
                   : 'flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-slate-700 hover:bg-slate-100'
               }
               title="Logout"

@@ -4,7 +4,6 @@ import Sidebar from '../layout/sidebar';
 import '../../styles/layout.css';
 
 const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  // Persisted collapsed state
   const [collapsed, setCollapsed] = useState<boolean>(
     () => localStorage.getItem('sidebar:collapsed') === '1'
   );
@@ -21,16 +20,16 @@ const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
   return (
     <div
-      className={`app-shell${collapsed ? ' sidebar-collapsed' : ''} min-h-screen bg-background text-foreground`}
+      className={`app-shell${collapsed ? ' sidebar-collapsed' : ''} min-h-screen bg-gradient-to-b from-background to-muted/40 text-foreground`}
     >
       <Sidebar collapsed={collapsed} onToggleCollapsed={toggleCollapsed} />
 
       <div className={['min-h-screen transition-[padding] duration-200', padLeft].join(' ')}>
         <Header sidebarOpen={!collapsed} onToggleSidebar={toggleCollapsed} />
 
-        <main className="p-4 sm:p-6 lg:p-8">
+        <main className="px-4 pb-10 pt-2 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-screen-2xl">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
+            <div className="rounded-2xl border border-border bg-card/95 p-4 shadow-sm ring-1 ring-black/5 sm:p-6">
               {children}
             </div>
           </div>

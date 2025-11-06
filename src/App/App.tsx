@@ -6,7 +6,7 @@ import SupportRouter from '../pages/support';
 import AgencyRouter from '../pages/agency';
 import UserRouter from '../pages/user';
 import AnonymousRouter from '../pages/anonymous';
-import Logout from '../pages/logout/Logout';
+import Logout from '../pages/anonymous/logout/Logout';
 import { Role } from '../types/roles';
 
 const App: React.FC = () => {
