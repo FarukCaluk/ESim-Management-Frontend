@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAPI } from '../../../hooks/use-api';
-import { getUsers } from '../../../api/models/user-modul';
+import { getUsers } from '../../../api/models/user.models';
 import { User } from '../../../types/user.types';
 
 interface UserTableProps {

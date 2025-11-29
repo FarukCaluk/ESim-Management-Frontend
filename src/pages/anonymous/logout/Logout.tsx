@@ -10,19 +10,15 @@ function clearCookies() {
 
 export default function Logout() {
   useEffect(() => {
-    // Optional: call backend to revoke cookie session
     fetch(`${process.env.REACT_APP_API_URL ?? ''}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
     }).catch(() => {});
 
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('role');
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     clearCookies();
 
-    // Tell App to re-read auth immediately
     window.dispatchEvent(new Event('auth:changed'));
   }, []);
 

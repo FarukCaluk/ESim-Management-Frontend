@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getOverviewStats, OverviewStats } from '../../../api/stats';
+import type { ActivityItem } from '../../../api/stats';
 
 const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
@@ -85,11 +86,16 @@ export default function Dashboard() {
                   </td>
                 </tr>
               ) : (
-                stats!.recent.map((r) => (
-                  <tr key={r.id ?? r.date}>
-                    <td className="px-4 py-3 border-t border-border">{r.action}</td>
+                stats!.recent.map((item: ActivityItem, idx: number) => (
+                  <tr key={item.entityId ?? `${item.type}-${idx}-${item.timestamp}`}>
                     <td className="px-4 py-3 border-t border-border">
-                      {new Date(r.date).toLocaleDateString()}
+                      <span className="mr-2 inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs uppercase tracking-wide text-foreground/70">
+                        {item.type}
+                      </span>
+                      {item.action}
+                    </td>
+                    <td className="px-4 py-3 border-t border-border">
+                      {new Date(item.timestamp).toLocaleString()}
                     </td>
                   </tr>
                 ))

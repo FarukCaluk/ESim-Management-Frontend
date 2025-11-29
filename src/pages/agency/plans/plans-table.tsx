@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAPI } from '../../../hooks/use-api';
-import { getPlans } from '../../../api/models/plan-modul';
+import { getPlans } from '../../../api/models/plan.models';
 import { Plan } from '../../../types/plan.types';
 
 export const PlansTable: React.FC = () => {

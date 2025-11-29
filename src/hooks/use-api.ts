@@ -1,26 +1,30 @@
-import { useState, useEffect } from 'react';
+import { DependencyList, useEffect, useState } from 'react';
 
-export const useAPI = <T>(fetchFn: () => Promise<T>) => {
+export const useAPI = <T>(fetchFn: () => Promise<T>, deps: DependencyList = []) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    let cancelled = false;
+
+    (async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const token = localStorage.getItem('token');
-
         const result = await fetchFn();
-        setData(result);
+        if (!cancelled) setData(result);
       } catch (err) {
-        setError(err as Error);
+        if (!cancelled) setError(err as Error);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
-    };
+    })();
 
-    fetchData();
-  }, [fetchFn]);
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchFn, ...deps]);
 
   return { data, loading, error };
 };

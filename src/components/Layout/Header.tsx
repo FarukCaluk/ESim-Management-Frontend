@@ -14,12 +14,10 @@ const Header: React.FC<{
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const role = (sessionStorage.getItem('role') ||
-    localStorage.getItem('role') ||
-    null) as Role | null;
+  const role = (localStorage.getItem('role') || null) as Role | null;
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) return;
 
     const load = async () => {
@@ -30,7 +28,6 @@ const Header: React.FC<{
         setName(data.name);
       } catch (error: any) {
         if (error?.response?.status === 401) {
-          sessionStorage.clear();
           localStorage.clear();
           window.location.href = '/login';
         }

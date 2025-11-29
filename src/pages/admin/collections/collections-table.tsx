@@ -1,64 +1,121 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAPI } from '../../../hooks/use-api';
-import { getCollections } from '../../../api/models/collection-modul';
+import { getCollections, createCollection } from '../../../api/models/collection.models';
+import { getProfile } from '../../../api/profile';
 import { Collection } from '../../../types/collection.types';
+import { getPlans } from '../../../api/models/plan.models';
+import { Plan } from '../../../types/plan.types';
+import { resolveUserId } from '../../../utils/resolve-user-id';
+import Spinner from '../../../components/ui/spinner';
+import ErrorAlert from '../../../components/ui/error-alert';
 
 export const CollectionsTable: React.FC = () => {
-  const { data: collections, loading, error } = useAPI<Collection[]>(getCollections);
+  const { data: plans } = useAPI<Plan[]>(getPlans);
+  const { data: profile } = useAPI(getProfile);
   const { t } = useTranslation();
 
   const [query, setQuery] = useState('');
-  const [copied, setCopied] = useState<string | null>(null);
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc'); // NEW
+  const normalizedQuery = query.trim().slice(0, 64);
+  const normalizedLower = normalizedQuery.toLowerCase();
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const filtered = useMemo(() => {
-    if (!collections) return [];
-    const q = query.trim().toLowerCase();
-    let list = !q
-      ? collections
-      : collections.filter((c) => {
-          const hay = [
-            c._id,
-            c.name,
-            c.country,
-            c.createdBy,
-            c.assignedAgency,
-            c.expirationDate ? new Date(c.expirationDate).toLocaleDateString() : '',
-            String(c.plans?.length ?? 0),
-          ]
-            .filter(Boolean)
-            .join(' ')
-            .toLowerCase();
-          return hay.includes(q);
-        });
+  const fetchCollections = useCallback(
+    () => getCollections(normalizedQuery || undefined),
+    [normalizedQuery, refreshKey]
+  );
+  const {
+    data: collections,
+    loading,
+    error,
+  } = useAPI<Collection[]>(fetchCollections, [normalizedQuery, refreshKey]);
+
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+
+  // Create modal state
+  const [showCreate, setShowCreate] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createErr, setCreateErr] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    name: '',
+    country: '',
+    expirationDate: '', // yyyy-mm-dd
+  });
+  const [createdBy, setCreatedBy] = useState<string>('');
+
+  useEffect(() => {
+    setCreatedBy(resolveUserId(profile as Record<string, any> | undefined));
+  }, [profile]);
+
+  const countsByCollectionId = React.useMemo(() => {
+    const map = new Map<string, number>();
+    (plans || []).forEach((p) => {
+      const colId =
+        (p as any).collectionId || (p as any).collection_id || (p as any).collection?.id;
+      if (colId) map.set(colId, (map.get(colId) || 0) + 1);
+    });
+    return map;
+  }, [plans]);
+
+  const sorted = useMemo(() => {
+    const base = !collections
+      ? []
+      : !normalizedLower
+        ? collections
+        : collections.filter((col) => col.name?.toLowerCase().includes(normalizedLower));
 
     const cmp = (a: Collection, b: Collection) =>
       (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
-    return list.slice().sort((a, b) => (sortDir === 'asc' ? cmp(a, b) : cmp(b, a)));
-  }, [collections, query, sortDir]);
+    return base.slice().sort((a, b) => (sortDir === 'asc' ? cmp(a, b) : cmp(b, a)));
+  }, [collections, normalizedLower, sortDir]);
 
-  const copy = async (value: string) => {
+  const submitCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreateErr(null);
+
+    if (!form.name.trim() || !form.country.trim()) {
+      setCreateErr('Name and Country are required');
+      return;
+    }
+    if (!createdBy) {
+      setCreateErr('Unable to resolve createdBy. Please re-login and try again.');
+      return;
+    }
+
+    const isoDate =
+      form.expirationDate && !Number.isNaN(Date.parse(form.expirationDate))
+        ? new Date(form.expirationDate).toISOString()
+        : undefined;
+
+    setCreating(true);
     try {
-      await navigator.clipboard.writeText(value);
-      setCopied(value);
-      setTimeout(() => setCopied((v) => (v === value ? null : v)), 1200);
-    } catch {
-      /* no-op */
+      await createCollection({
+        name: form.name.trim(),
+        country: form.country.trim(),
+        createdBy,
+        ...(isoDate ? { expirationDate: isoDate } : {}),
+      });
+
+      setRefreshKey((k) => k + 1);
+
+      setShowCreate(false);
+      setForm({ name: '', country: '', expirationDate: '' });
+    } catch (err: any) {
+      setCreateErr(err.message || 'Failed to create collection');
+    } finally {
+      setCreating(false);
     }
   };
 
-  if (loading) {
-    return <div className="h-32 animate-pulse rounded-xl border border-border bg-card" />;
+  if (loading && !collections) {
+    return <Spinner className="h-32 w-full rounded-xl border border-border bg-card" />;
   }
 
   if (error) {
-    return (
-      <div className="rounded-md border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-        {t('errorLoadingCollections') || 'Error loading collections'}
-      </div>
-    );
+    return <ErrorAlert message={t('errorLoadingCollections') || 'Error loading collections'} />;
   }
+
+  const pending = loading && !!collections;
 
   return (
     <div className="rounded-2xl border border-border bg-card shadow-sm">
@@ -67,7 +124,7 @@ export const CollectionsTable: React.FC = () => {
           <h2 className="text-base font-semibold text-foreground">
             {t('Collections') || 'Collections'}
           </h2>
-          <span className="text-xs text-foreground/60">({filtered.length})</span>
+          <span className="text-xs text-foreground/60">({sorted.length})</span>
         </div>
         <div className="flex items-center gap-2">
           <input
@@ -84,6 +141,13 @@ export const CollectionsTable: React.FC = () => {
           >
             {sortDir === 'asc' ? 'A–Z' : 'Z–A'}
           </button>
+          <button
+            type="button"
+            onClick={() => setShowCreate(true)}
+            className="h-9 rounded-md bg-primary px-3 text-sm font-medium text-white hover:bg-primary/90"
+          >
+            + Add
+          </button>
         </div>
       </div>
 
@@ -92,9 +156,6 @@ export const CollectionsTable: React.FC = () => {
         <table className="min-w-[1000px] w-full border-separate border-spacing-0 text-sm">
           <thead className="sticky top-0 z-10 bg-muted/60 backdrop-blur">
             <tr className="border-y border-border text-foreground/80">
-              <th className="px-4 py-2 text-left text-[13px] font-medium whitespace-nowrap">
-                {t('collections.table.id')}
-              </th>
               <th className="px-4 py-2 text-left text-[13px] font-medium whitespace-nowrap">
                 {t('collections.table.name')}
               </th>
@@ -116,35 +177,18 @@ export const CollectionsTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {sorted.length === 0 ? (
               <tr>
-                <td className="px-4 py-8 text-center text-foreground/60" colSpan={7}>
+                <td className="px-4 py-8 text-center text-foreground/60" colSpan={6}>
                   {t('noResults') || 'No results'}
                 </td>
               </tr>
             ) : (
-              filtered.map((col) => (
+              sorted.map((col) => (
                 <tr
                   key={col._id}
                   className="border-t border-border odd:bg-card even:bg-muted/20 hover:bg-accent/40"
                 >
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-block max-w-[220px] truncate" title={col._id}>
-                        {col._id}
-                      </span>
-                      {col._id && (
-                        <button
-                          type="button"
-                          onClick={() => copy(col._id!)}
-                          className="inline-flex h-6 items-center rounded border border-border px-2 text-xs text-foreground/70 hover:bg-accent"
-                          title="Copy ID"
-                        >
-                          {copied === col._id ? 'Copied' : 'Copy'}
-                        </button>
-                      )}
-                    </div>
-                  </td>
                   <td className="px-4 py-3">
                     <span className="block max-w-[260px] truncate" title={col.name}>
                       {col.name}
@@ -170,13 +214,81 @@ export const CollectionsTable: React.FC = () => {
                       {col.assignedAgency || '-'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">{col.plans?.length ?? 0}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {countsByCollectionId.get(col._id as any) ??
+                      (col as any).plansCount ??
+                      col.plans?.length ??
+                      0}
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {showCreate && (
+        <div className="fixed inset-0 z-50 grid place-items-center">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => !creating && setShowCreate(false)}
+          />
+          <div className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-xl">
+            <h3 className="mb-4 text-lg font-semibold">Add Collection</h3>
+            <form onSubmit={submitCreate} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <label className="mb-1 block text-xs font-medium">Name *</label>
+                  <input
+                    className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm focus:ring-2 focus:ring-primary/30 focus:outline-none"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium">Country *</label>
+                  <input
+                    className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm"
+                    value={form.country}
+                    onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium">Expiration Date</label>
+                  <input
+                    type="date"
+                    className="h-9 w-full rounded-md border border-border bg-card px-3 text-sm"
+                    value={form.expirationDate}
+                    onChange={(e) => setForm((f) => ({ ...f, expirationDate: e.target.value }))}
+                  />
+                </div>
+              </div>
+
+              {createErr && <div className="text-xs text-destructive">{createErr}</div>}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => !creating && setShowCreate(false)}
+                  className="h-9 rounded-md border border-border bg-background px-4 text-sm hover:bg-accent"
+                  disabled={creating}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="h-9 rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-60"
+                  disabled={creating}
+                >
+                  {creating ? 'Saving…' : 'Save'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

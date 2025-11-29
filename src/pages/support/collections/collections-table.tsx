@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAPI } from '../../../hooks/use-api';
-import { getCollections } from '../../../api/models/collection-modul';
+import { getCollections } from '../../../api/models/collection.models';
 import { Collection } from '../../../types/collection.types';
 
 export const CollectionsTable: React.FC = () => {

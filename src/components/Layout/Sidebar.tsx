@@ -13,20 +13,18 @@ import {
 
 type SidebarProps = {
   collapsed?: boolean;
-  onToggleCollapsed?: () => void; // kept for compatibility, not used here
+  onToggleCollapsed?: () => void;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed = false /*, onToggleCollapsed*/ }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed = false }) => {
   const location = useLocation();
-  const rawRole = sessionStorage.getItem('role') || localStorage.getItem('role');
+  const rawRole = localStorage.getItem('role');
   const roleValue = (rawRole as Role | null) ?? null;
 
   const canAS = roleValue === Role.Admin || roleValue === Role.Support;
   const canASA = canAS || roleValue === Role.Agency;
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('role');
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     window.location.href = '/login';

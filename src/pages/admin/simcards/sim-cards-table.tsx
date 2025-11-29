@@ -1,40 +1,21 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Copy, Check } from 'lucide-react';
+import { copyToClipboard } from '../../../utils/clipboard';
 
 import { useAPI } from '../../../hooks/use-api';
-import { getSimCards } from '../../../api/models/simcard-modul';
+import { getSimCards } from '../../../api/models/simcard.models';
 import { SimCard } from '../../../types/simcard.types';
 
 export const SimCardsTable: React.FC = () => {
-  const { data: simCards, loading, error } = useAPI<SimCard[]>(getSimCards);
-  const { t } = useTranslation();
-
   const [query, setQuery] = useState('');
+  const normalizedQuery = query.trim().slice(0, 64);
+  const fetchSimCards = useCallback(
+    () => getSimCards(normalizedQuery || undefined),
+    [normalizedQuery]
+  );
+  const { data: simCards, loading, error } = useAPI<SimCard[]>(fetchSimCards, [normalizedQuery]);
+  const { t } = useTranslation();
   const [copied, setCopied] = useState<string | null>(null);
-
-  const filtered = useMemo(() => {
-    if (!simCards) return [];
-    const q = query.trim().toLowerCase();
-    if (!q) return simCards;
-    return simCards.filter((s) => {
-      const values = [s._id, s.iccid, s.userId, s.providerId, s.orderId, s.comment]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      return values.includes(q);
-    });
-  }, [simCards, query]);
-
-  const copy = async (value: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(value);
-      setTimeout(() => setCopied((v) => (v === value ? null : v)), 1200);
-    } catch {
-      // no-op
-    }
-  };
 
   const Badge = ({ on }: { on: boolean }) => (
     <span
@@ -79,7 +60,25 @@ export const SimCardsTable: React.FC = () => {
     </th>
   );
 
-  if (loading) {
+  const handleCopy = async (value: string) => {
+    if (!value) return;
+    const ok = await copyToClipboard(value);
+    if (ok) {
+      setCopied(value);
+      setTimeout(() => setCopied((curr) => (curr === value ? null : curr)), 1200);
+    }
+  };
+
+  const normalizedQueryLower = normalizedQuery.toLowerCase();
+  const filteredSimCards = useMemo(() => {
+    if (!simCards) return [];
+    if (!normalizedQueryLower) return simCards;
+    return simCards.filter((s) => s.iccid?.toLowerCase().includes(normalizedQueryLower));
+  }, [simCards, normalizedQueryLower]);
+
+  const isInitialLoad = loading && !simCards;
+
+  if (isInitialLoad) {
     return <div className="h-32 animate-pulse rounded-xl border border-border bg-card" />;
   }
 
@@ -97,15 +96,21 @@ export const SimCardsTable: React.FC = () => {
       <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
         <div className="flex items-baseline gap-2">
           <h2 className="text-base font-semibold text-foreground">{t('Simcards') || 'Simcards'}</h2>
-          <span className="text-xs text-foreground/60">({filtered.length})</span>
+          <span className="text-xs text-foreground/60">({filteredSimCards.length})</span>
         </div>
         <div className="relative">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={t('search') || 'Search...'}
+            maxLength={64}
+            placeholder={t('Search') || 'Search...'}
             className="h-9 w-56 rounded-md border border-border bg-background px-3 text-sm text-foreground placeholder:text-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
+          {loading && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-foreground/50">
+              {t('loading') || 'Loading…'}
+            </span>
+          )}
         </div>
       </div>
 
@@ -114,7 +119,6 @@ export const SimCardsTable: React.FC = () => {
         <table className="min-w-[1000px] w-full border-separate border-spacing-0 text-sm">
           <thead className="sticky top-0 z-10 bg-muted/60 backdrop-blur">
             <tr className="border-y border-border">
-              <Head className="whitespace-nowrap">{t('simcards.table.simcardId')}</Head>
               <Head className="whitespace-nowrap">{t('simcards.table.iccid')}</Head>
               <Head className="whitespace-nowrap">{t('simcards.table.userId')}</Head>
               <Head className="whitespace-nowrap">{t('simcards.table.providerId')}</Head>
@@ -125,37 +129,31 @@ export const SimCardsTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {filteredSimCards.length === 0 ? (
               <tr>
                 <td className="px-4 py-8 text-center text-foreground/60" colSpan={8}>
                   {t('noResults') || 'No results'}
                 </td>
               </tr>
             ) : (
-              filtered.map((sim: SimCard, idx: number) => (
+              filteredSimCards.map((sim: SimCard, idx: number) => (
                 <tr
                   key={sim._id ?? idx}
                   className="border-t border-border odd:bg-card even:bg-muted/20 hover:bg-accent/40"
                 >
-                  <Cell nowrap>
+                  <Cell nowrap title={sim.iccid}>
                     <div className="flex items-center gap-2">
-                      <span className="max-w-[210px] truncate" title={sim._id}>
-                        {sim._id}
-                      </span>
-                      {sim._id && (
+                      <span className="max-w-[220px] truncate inline-block">{sim.iccid}</span>
+                      {sim.iccid && (
                         <button
                           type="button"
-                          onClick={() => copy(sim._id!)}
-                          className="inline-flex h-6 w-6 items-center justify-center rounded border border-border text-foreground/70 hover:bg-accent"
-                          title="Copy ID"
+                          onClick={() => handleCopy(sim.iccid!)}
+                          className="inline-flex h-6 items-center rounded border border-border px-2 text-xs text-foreground/70 hover:bg-accent"
                         >
-                          {copied === sim._id ? <Check size={14} /> : <Copy size={14} />}
+                          {copied === sim.iccid ? 'Copied' : 'Copy'}
                         </button>
                       )}
                     </div>
-                  </Cell>
-                  <Cell nowrap title={sim.iccid}>
-                    <span className="max-w-[220px] truncate inline-block">{sim.iccid}</span>
                   </Cell>
                   <Cell nowrap title={sim.userId || undefined}>
                     <span className="max-w-[200px] truncate inline-block">{sim.userId || '-'}</span>

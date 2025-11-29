@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAPI } from '../../../hooks/use-api';
-import { getPackages } from '../../../api/models/package-modul';
+import { getPackages } from '../../../api/models/package.models';
 import { Package } from '../../../types/package.types';
 
 export const PackagesTable: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/globals.css';
 import AdminRouter from '../pages/admin';
 import SupportRouter from '../pages/support';
 import AgencyRouter from '../pages/agency';
@@ -8,25 +8,35 @@ import UserRouter from '../pages/user';
 import AnonymousRouter from '../pages/anonymous';
 import Logout from '../pages/anonymous/logout/Logout';
 import { Role } from '../types/roles';
+import { localStorageHelper, StorageKey } from '../utils/localstorage.helper';
+import { getProfile } from '../api/profile';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState<Role | null>(null);
+  const [user, setUser] = useState<unknown>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const syncAuth = () => {
-      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-      const storedRole = (sessionStorage.getItem('role') ||
-        localStorage.getItem('role') ||
-        null) as Role | null;
-      const valid = !!token && token !== 'undefined' && token !== 'null' && token !== '';
-      setIsLoggedIn(valid);
-      setRole(valid ? storedRole : null);
+    const syncAuth = async () => {
+      const token = localStorageHelper.get<string>(StorageKey.Token);
+      if (token) {
+        try {
+          const profile = await getProfile();
+          setUser(profile);
+        } catch {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+      setIsReady(true);
     };
 
     syncAuth();
     window.addEventListener('storage', syncAuth);
     window.addEventListener('app:auth-change', syncAuth);
+
     return () => {
       window.removeEventListener('storage', syncAuth);
       window.removeEventListener('app:auth-change', syncAuth);

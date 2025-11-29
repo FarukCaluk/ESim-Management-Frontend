@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Copy, Check } from 'lucide-react';
 
 import { useAPI } from '../../../hooks/use-api';
-import { getSimCards } from '../../../api/models/simcard-modul';
+import { getSimCards } from '../../../api/models/simcard.models';
 import { SimCard } from '../../../types/simcard.types';
 
 export const SimCardsTable: React.FC = () => {
