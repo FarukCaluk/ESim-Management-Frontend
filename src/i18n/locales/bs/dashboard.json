@@ -1,0 +1,12 @@
+{
+  "dashboard.title": "Kontrolna ploča",
+  "dashboard.totalUsers": "Ukupno korisnika",
+  "dashboard.totalPlans": "Ukupno planova",
+  "dashboard.totalCollections": "Ukupno kolekcija",
+  "dashboard.totalRevenue": "Ukupni prihod",
+  "dashboard.recentActivity": "Nedavne aktivnosti",
+  "dashboard.activity": "Aktivnost",
+  "dashboard.date": "Datum",
+  "dashboard.addUser": "Dodaj korisnika",
+  "dashboard.createPlan": "Kreiraj plan"
+}

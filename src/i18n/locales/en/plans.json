@@ -1,0 +1,14 @@
+{
+  "plans": "Plans",
+  "plans.table.id": "ID",
+  "plans.table.name": "Name",
+  "plans.table.volume": "Volume",
+  "plans.table.days": "Days",
+  "plans.table.providerPrice": "Provider Price",
+  "plans.table.esimflyPrice": "ESIMFLY Price",
+  "plans.table.earnings": "Earnings",
+  "plans.table.collectionId": "Collection ID",
+  "plans.table.country": "Country",
+  "plans.table.available": "Available",
+  "plans.table.availableCount": "Available Count"
+}

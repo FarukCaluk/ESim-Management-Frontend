@@ -1,0 +1,14 @@
+{
+  "plans": "Planovi",
+  "plans.table.id": "ID",
+  "plans.table.name": "Naziv",
+  "plans.table.volume": "Obim",
+  "plans.table.days": "Dana",
+  "plans.table.providerPrice": "Cijena provajdera",
+  "plans.table.esimflyPrice": "ESIMFLY cijena",
+  "plans.table.earnings": "Zarada",
+  "plans.table.collectionId": "ID kolekcije",
+  "plans.table.country": "Država",
+  "plans.table.available": "Dostupno",
+  "plans.table.availableCount": "Broj dostupnih"
+}

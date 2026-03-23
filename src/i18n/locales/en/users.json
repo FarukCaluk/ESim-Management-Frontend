@@ -1,0 +1,15 @@
+{
+  "users": "Users",
+  "users.table.id": "ID",
+  "users.table.avatar": "Avatar",
+  "users.table.name": "Name",
+  "users.table.email": "Email",
+  "users.table.verified": "Verified",
+  "users.table.language": "Language",
+  "users.table.currency": "Currency",
+  "users.table.type": "Type",
+  "users.table.credits": "Credits",
+  "users.table.totalOrders": "Total Orders",
+  "users.table.phone": "Phone",
+  "users.table.lastGiftOrder": "Last Gift Order"
+}

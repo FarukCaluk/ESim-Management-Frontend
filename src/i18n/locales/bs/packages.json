@@ -1,0 +1,8 @@
+{
+  "packages": "Paketi",
+  "packages.table.id": "ID",
+  "packages.table.name": "Naziv",
+  "packages.table.volume": "Obim",
+  "packages.table.days": "Dana",
+  "packages.table.providerPrice": "Cijena provajdera"
+}

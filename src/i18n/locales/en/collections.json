@@ -1,0 +1,10 @@
+{
+  "collections": "Collections",
+  "collections.table.id": "ID",
+  "collections.table.name": "Name",
+  "collections.table.country": "Country",
+  "collections.table.expirationDate": "Expiration Date",
+  "collections.table.createdBy": "Created By",
+  "collections.table.assignedAgency": "Assigned Agency",
+  "collections.table.plans": "Plans"
+}

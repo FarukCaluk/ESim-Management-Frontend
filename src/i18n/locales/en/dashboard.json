@@ -1,0 +1,12 @@
+{
+  "dashboard.title": "Dashboard",
+  "dashboard.totalUsers": "Total Users",
+  "dashboard.totalPlans": "Total Plans",
+  "dashboard.totalCollections": "Total Collections",
+  "dashboard.totalRevenue": "Total Revenue",
+  "dashboard.recentActivity": "Recent Activity",
+  "dashboard.activity": "Activity",
+  "dashboard.date": "Date",
+  "dashboard.addUser": "Add User",
+  "dashboard.createPlan": "Create Plan"
+}

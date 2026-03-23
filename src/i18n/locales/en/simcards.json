@@ -1,0 +1,11 @@
+{
+  "simcards": "SIM Cards",
+  "simcards.table.simcardId": "ID",
+  "simcards.table.iccid": "ICCID",
+  "simcards.table.userId": "User ID",
+  "simcards.table.providerId": "Provider ID",
+  "simcards.table.orderId": "Order ID",
+  "simcards.table.comment": "Comment",
+  "simcards.table.reserved": "Reserved",
+  "simcards.table.expiration": "Expiration"
+}
